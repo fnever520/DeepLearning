@@ -68,7 +68,7 @@ class CGAN():
         self.rows = 1
         self.cols = 9
         self.channels = 1
-        self.data_shape = (self.rows, self.cols, self.channels)
+        self.data_shape = (self.rows, self.cols)
         self.num_classes = 2
         self.latent_dim = 100
 
@@ -191,7 +191,9 @@ class CGAN():
 
             idx = np.random.randint(0, x_train.shape[0], batch_size)
             datas, labels = x_train[idx], y_train[idx]
-
+            #print(datas.shape)
+            datas =datas.swapaxes(2,1)
+            #print(datas.shape)
             # Sample noise as generator input
             noise = np.random.normal(0, 1, (batch_size, 100))
 
@@ -208,7 +210,7 @@ class CGAN():
             # ---------------------
 
             # Condition on labels
-            sampled_labels = np.random.randint(0, 10, batch_size).reshape(-1, 1)
+            sampled_labels = np.random.randint(0, 2, batch_size).reshape(-1, 1)
 
             # Train the generator
             g_loss = self.combined.train_on_batch([noise, sampled_labels], valid)
@@ -220,7 +222,7 @@ class CGAN():
             if epoch % sample_interval == 0:
                 self.sample_images(epoch)
 
-    def sample_data(self, epoch):
+    def sample_images(self, epoch):
         r = 1
         noise = np.random.normal(0, 1, (r, 100))
         sampled_labels = np.arange(0, 10).reshape(-1, 1)
@@ -234,4 +236,4 @@ class CGAN():
 
 if __name__ == '__main__':
     cgan = CGAN()
-    cgan.train(epochs=20000, x_train = X_train, y_train=Y_train_, batch_size=32, sample_interval=200)
+    cgan.train(epochs=1000, x_train = X_train, y_train=Y_train_, batch_size=32, sample_interval=200)
