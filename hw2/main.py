@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 dataset_path = join(dirname(__file__),"HW2_data")
 csv = ['BNNdata_20080701.csv', 'breast-cancer.csv', 'breast-w.csv','colic.csv', 'credit-a.csv', 'credit-g.csv', 'diabetes.csv', 'heart-statlog.csv']
 
-csvfile = join(dataset_path,"labor.csv")
+csvfile = join(dataset_path,"breast-cancer.csv")
 
 dataset = pd.read_csv(csvfile)
 X = dataset.iloc[:,1:-1].values
@@ -60,40 +60,14 @@ X_train = np.array(X_train)
 print(X_train.shape)
 X_test = np.array(X_test)
 Y_train = np.array(Y_train)
-Y_test = np.array(Y_test)
+Y_test_ = np.array(Y_test)
 Y_train = keras.utils.to_categorical(Y_train)
-Y_test = keras.utils.to_categorical(Y_test)
+Y_test = keras.utils.to_categorical(Y_test_)
 
 
 # print("[Before] \nThe ratio: ", Y.sum()/Y.shape[0])
 print("[After]\nShape : ", Y_train.shape, Y_test.shape)
-print("The ratio for testing set: ", Y_test.sum()/Y_test.shape[0])
-
-def multiLayerPerceptron():
-    global X_train
-    global X_test
-    global Y_train
-    global Y_test
-    
-    attribute = X_train.shape[1]
-    numClass = 2
-    Y_train = keras.utils.to_categorical(Y_train)
-    Y_test = keras.utils.to_categorical(Y_test)
-    model=Sequential()
-    model.add(Dense(100,input_dim=attribute))
-    model.add(Activation('sigmoid'))
-    model.add(Dense(numClass))
-    model.add(Activation('softmax'))
-    sgd = SGD(lr = 0.01)
-    model.compile(optimizer=sgd, loss = 'mse', metrics = ['accuracy'])
-    model.fit(X_train, Y_train)
-    y_predicted = np.argmax(model.predict(X_test))
-    print(y_predicted)
-    y_true = np.argmax(Y_test)
-    print(y_true)
-    num_correct=np.sum(y_predicted==y_true)
-    # accuracy=float(num_correct)/y_predicted.shape[0]
-    # print(accuracy)
+print("The ratio for testing set: ", Y_test_.sum()/Y_test.shape[0])
 
 # HyperParameters
 lr = 0.001
@@ -103,7 +77,7 @@ batch_size = 5
 # Network Parameters
 n_hidden_1 = 256 # number of neurons in 1st layer 
 n_hidden_2 = 9 # number of neurons in 2nd layer 
-n_input = 16 
+n_input = 9 
 n_classes = 2  
 steps = len(X_train) # How many training data
 print(X_train.shape)
