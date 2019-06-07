@@ -26,7 +26,7 @@ class PrepareData:
         self.review_length = review_length
 
     # if text only - is_text=True, else set path to reviews' dir
-    def get_data(self, path='', is_text=False, text=''):
+    def get_data(self, path='', is_text=False, text='', porter=False):
         data = []
         if self.is_one_file:
             if is_text:
@@ -35,14 +35,14 @@ class PrepareData:
             else:
                 with open(path, 'r', encoding="utf-8") as file:
                     input_text = file.read()
-                    tokens = self.get_tokens(input_text)
+                    tokens = self.get_tokens(input_text,porter=False)
                     data.append(tokens)
         else:
             files = os.listdir(path)
             for i in range(len(files)):
                 with open(path + files[i], 'r', encoding="utf-8") as file:
                     input_text = file.read()
-                    tokens = self.get_tokens(input_text)
+                    tokens = self.get_tokens(input_text,porter=False)
                     data.append(tokens)
 
         data_norm = []
@@ -73,7 +73,7 @@ class PrepareData:
 
     # split and process text of review into tokens
     @staticmethod
-    def get_tokens(input_text):
+    def get_tokens(input_text, porter):
         try:
             text = input_text.lower()
             text = text.replace('"', '')
